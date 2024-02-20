@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "github": {
+    "enabled": false
+  },
+  "devCommand": "uvicorn vmail.app:app --host 0.0.0.0 --port 3001",
+  "builds": [
+    {"src": "vmail/app.py", "use": "@vercel/python"}
+  ],
+  "routes": [
+    {"src": "/(.*)", "dest": "vmail/app.py"}
+  ]
+}

@@ -12,8 +12,9 @@ fastapi = "^0.109.2"
 sqlalchemy = "^2.0.27"
 pydantic-settings = "^2.2.1"
 fastapi-mail = "^1.4.1"
-aiosqlite = "^0.20.0"
 sqlalchemy-libsql = "^0.1.0"
+python-multipart = "^0.0.9"
+psycopg = "^3.1.18"
 
 
 [tool.poetry.group.dev.dependencies]
