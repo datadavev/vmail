@@ -32,6 +32,9 @@ def get_vmail_router(
     ) -> model.EmailAddress:
         """
         Checks validity of an email address.
+
+        This check is to ensure the email address is syntactically correct
+        and that the domain name of the address resolves.
         """
         result = model.EmailAddress(address=email)
         try:
@@ -44,6 +47,15 @@ def get_vmail_router(
             result.valid = False
             result.verified = False
             result.message = str(e)
+            return result
+        # See if the email is in the verified list
+        record = request.state.vmailrepo.read(result.normalized)
+        if record is not None:
+            result.verified = record.verified
+            result.message = "Address is valid and verified."
+        else:
+            result.verified = model.VerifiedEnum.unverified
+            result.message = "Address is valid but not verified"
         return result
 
     @router.post("/register")
@@ -54,16 +66,13 @@ def get_vmail_router(
         appname: typing.Annotated[typing.Optional[str], fastapi.Form()] = None,
     ) -> model.EmailAddress:
         """
-        Generates an OTP and sends it via email to the provided address.
+        Generates a one-time-passcode and sends it via email to the provided
+        address.
 
-        The recipient must visit the included URL to verify the email.
-
-        Args:
-            email:
-            token:
-
-        Returns:
-
+        The recipient must visit provide the OTP to this service to complete the
+        verification process. This is usually done by the system requesting
+        verification, as the user does not have the API key necessary to connect
+        to the /verify operation.
         """
         result = model.EmailAddress(address=email)
         try:
@@ -113,13 +122,6 @@ def get_vmail_router(
     ) -> model.EmailAddress:
         """
         Given an email address, return its verification status.
-
-        Args:
-            email: The email address
-            request: The fastapi request
-
-        Returns:
-
         """
         result = model.EmailAddress(address=email)
         try:
@@ -155,16 +157,9 @@ def get_vmail_router(
         request: fastapi.Request,
     ) -> model.VerifiedResponse:
         """
-        Given a previously sent OTP code, update the email with its verification status.
-
-        Args:
-            token:
-            request:
-
-        Returns:
-
+        Given a previously sent OTP, update the email with its verification
+        status.
         """
-        # TODO: Check token is not expired (too old)
         entry = request.state.vmailrepo.get_instance_by_token(token)
         if entry is None:
             raise fastapi.HTTPException(status_code=404)
