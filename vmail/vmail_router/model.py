@@ -8,9 +8,13 @@ import pydantic
 
 
 class VerifiedEnum(enum.IntEnum):
+    # Email has not been verified
     unverified = 0
+    # Email has been verified
     verified = 1
+    # Email verification is awaiting a response from the subject
     pending = 2
+    # The email verification has expired
     expired = 3
 
 
