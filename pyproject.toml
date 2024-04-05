@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vmail"
-version = "0.2.0"
+version = "0.3.0"
 description = "Simple email verification service."
 authors = ["datadave <605409+datadavev@users.noreply.github.com>"]
 license = "GPLv3"
@@ -16,6 +16,15 @@ sqlalchemy-libsql = "^0.1.0"
 python-multipart = "^0.0.9"
 psycopg = "^3.1.18"
 
+[[tool.poetry_bumpversion.replacements]]
+files = ["vmail/__init__.py", "vmail/vmail_router/__init__.py"]
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[[tool.poetry_bumpversion.replacements]]
+files = ["README.md"]
+search = 'version: {current_version}'
+replace = 'version: {new_version}'
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.1"

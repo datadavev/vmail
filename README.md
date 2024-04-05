@@ -1,3 +1,7 @@
+---
+title: vmail
+version: 0.3.0
+---
 # vmail
 
 Email verification service.

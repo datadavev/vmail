@@ -2,6 +2,6 @@ fastapi
 pydantic-settings
 fastapi-mail
 python-multipart
-sqlalchemy==2.0.27
+sqlalchemy>=2.0
 libsql-client
 psycopg[binary]
