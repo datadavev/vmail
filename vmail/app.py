@@ -104,6 +104,14 @@ def create_application() -> fastapi.FastAPI:
             response = await call_next(request)
             return response
 
+    @app.get("/favicon.ico", include_in_schema=False)
+    async def get_favicon():
+        raise fastapi.HTTPException(status_code=404, detail="Not found")
+
+    @app.get("/", include_in_schema=False)
+    async def docs_redirect():
+        return fastapi.responses.RedirectResponse(url='/docs')
+
     app.include_router(
         router.get_vmail_router(
             get_settings,

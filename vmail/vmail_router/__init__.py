@@ -11,7 +11,7 @@ import fastapi_mail
 
 from ..config import get_settings
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 L = logging.getLogger("vmail_router")
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vmail"
-version = "0.3.0"
+version = "0.3.1"
 description = "Simple email verification service."
 authors = ["datadave <605409+datadavev@users.noreply.github.com>"]
 license = "GPLv3"
