@@ -49,13 +49,17 @@ def get_vmail_router(
             result.message = str(e)
             return result
         # See if the email is in the verified list
-        record = request.state.vmailrepo.read(result.normalized)
-        if record is not None:
-            result.verified = record.verified
-            result.message = "Address is valid and verified."
-        else:
-            result.verified = model.VerifiedEnum.unverified
-            result.message = "Address is valid but not verified"
+        try:
+            record = request.state.vmailrepo.read(result.normalized)
+            if record is not None:
+                result.verified = record.verified
+                result.message = "Address is valid and verified."
+            else:
+                result.verified = model.VerifiedEnum.unverified
+                result.message = "Address is valid but not verified"
+        except Exception as e:
+            result.verified = False
+            result.message = "ERROR: Could not connect to validation database."
         return result
 
     @router.post("/register")

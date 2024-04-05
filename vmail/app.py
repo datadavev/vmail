@@ -13,10 +13,10 @@ import sqlalchemy
 
 from .config import get_settings
 
+from . import __version__
 from .vmail_router import repo
 from .vmail_router import router
 
-__version__ = '0.2.0'
 
 L = logging.getLogger("vmail")
 
@@ -65,6 +65,12 @@ def create_application() -> fastapi.FastAPI:
 
     api_key_header = fastapi.security.APIKeyHeader(name="X-API-Key")
 
+
+    def custom_header_dependency(x_api_key: str=fastapi.Header())->str:
+        print(f"XAPIKEY = {x_api_key}")
+        return x_api_key
+
+
     def get_api_key(api_key: str = fastapi.Security(api_key_header)) -> str:
         if api_key in settings.api_keys.values():
             return api_key
@@ -101,7 +107,10 @@ def create_application() -> fastapi.FastAPI:
     app.include_router(
         router.get_vmail_router(
             get_settings,
-            dependencies=[fastapi.Depends(get_api_key),],
+            dependencies=[
+                fastapi.Depends(get_api_key),
+                fastapi.Depends(custom_header_dependency)
+            ],
         ),
         prefix="",
         tags=["vmail"],
